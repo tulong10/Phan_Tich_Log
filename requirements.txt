@@ -1,0 +1,7 @@
+# Các thư viện cần có để chạy ứng dụng.
+streamlit                   # Để chạy web app
+mysql-connector-python      # Để kết nối Docker MySQL
+pandas                      # "Vua" xử lý dữ liệu bảng
+matplotlib                  # Vẽ biểu đồ tĩnh
+plotly                      # Vẽ biểu đồ tương tác (Zoom/Hover)
+python-dotenv               # (Tùy chọn) Để quản lý biến môi trường
