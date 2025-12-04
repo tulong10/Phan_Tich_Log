@@ -1,0 +1,10 @@
+
+venv/
+env/
+.env
+
+# Chặn file rác Python sinh ra
+__pycache__/
+*.pyc
+
+.DS_Store
