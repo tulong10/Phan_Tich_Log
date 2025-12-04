@@ -30,12 +30,12 @@ def get_connection_pool():
         st.error(f" Lỗi tạo connection pool: {err}")
         return None
 
-@contextmanager
+@contextmanager # Cho phép sử dụng với 'with' statement và 'as' và đảm bảo đóng kết nối.
 def get_db_connection():
 
     pool = get_connection_pool()
     if pool is None:
-        yield None
+        yield None 
         return
     
     conn = None
@@ -85,7 +85,7 @@ def save_log_data(list_data: List[Tuple]) -> bool:
     
     Returns:
         bool: True nếu thành công, False nếu có lỗi
-    """
+    """ 
     if not list_data:
         st.warning("Không có dữ liệu để lưu")
         return False
@@ -103,7 +103,7 @@ def save_log_data(list_data: List[Tuple]) -> bool:
                 (ip_address, timestamp, status, log_level, response) 
                 VALUES (%s, %s, %s, %s, %s)
             """
-            
+
             cursor.executemany(query, list_data)
             conn.commit()
             
