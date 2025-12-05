@@ -212,7 +212,7 @@ def get_logs_by_filters(
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
             return df
         except Exception as e:
-            st.error(f"❌ Lỗi khi lọc dữ liệu: {e}")
+            st.error(f"Lỗi khi lọc dữ liệu: {e}")
             return pd.DataFrame()
 
 def get_statistics() -> dict:
