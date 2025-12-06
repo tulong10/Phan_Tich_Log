@@ -21,5 +21,5 @@ DB_PORT=3306
 - docker-compose up -d
 - Application will run at: http://localhost:8501
 ## 4. Run locally (without Docker)
-bashpip install -r requirements.txt
-streamlit run app.py
+- pip install -r requirements.txt
+- streamlit run app.py
