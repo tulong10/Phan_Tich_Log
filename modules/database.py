@@ -1,17 +1,21 @@
+
 import pandas as pd
 import mysql.connector
 from mysql.connector import Error, pooling
 import streamlit as st
+import os
 from typing import List, Tuple, Optional
 from contextlib import contextmanager
+from dotenv import load_dotenv
 
-# Cấu hình kết nối cơ sở dữ liệu MySQL
+load_dotenv()
+
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'python2025',
-    'database': 'log_db',
-    'port': 3307
+    'host': os.getenv('DB_HOST'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'database': os.getenv('DB_NAME'),
+    'port': int(os.getenv('DB_PORT', 3306))
 }
 
 @st.cache_resource
