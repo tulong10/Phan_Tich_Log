@@ -1,0 +1,5 @@
+[global]
+useMatplotlibTheme = false
+
+[theme]
+base = "light"
