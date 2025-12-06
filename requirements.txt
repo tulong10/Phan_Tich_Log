@@ -6,3 +6,4 @@ matplotlib                  # Vẽ biểu đồ tĩnh
 plotly                      # Vẽ biểu đồ tương tác
 python-dotenv               # Để quản lý biến môi trường
 reportlab
+python-pptx
