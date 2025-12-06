@@ -7,42 +7,67 @@ from io import BytesIO
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table
 from reportlab.lib.styles import getSampleStyleSheet
 from pptx import Presentation
-from charts import analyze  # Import từ file charts.py
+from modules.visualizations import analyze  # Import từ file charts.py
 
 plt.style.use("ggplot")
 
 def load_file(uploaded_file):
     if uploaded_file is None:
         return pd.DataFrame()
+
     try:
-        if uploaded_file.name.endswith(".csv"):
+        name = uploaded_file.name.lower()
+        if name.endswith(".csv"):
             df = pd.read_csv(uploaded_file)
-        else:
-            content = uploaded_file.read().decode("utf8", errors="ignore")
-            rows = []
-            for L in content.splitlines():
-                parts = L.split()
-                if len(parts) < 7:
-                    continue
-                ip = parts[0]
-                time = ""
-                if "[" in L:
-                    time = L.split("[")[1].split("]")[0]
-                req = ""
+            return df
+
+        # =============================
+        # PARSER LOG APACHE/NGINX
+        # =============================
+        content = uploaded_file.read().decode("utf8", errors="ignore")
+        rows = []
+
+        for L in content.splitlines():
+            parts = L.split()
+
+            # Không hợp lệ
+            if len(parts) < 9:
+                continue
+
+            # IP 
+            ip = parts[0]
+
+            # Time
+            time = ""
+            if "[" in L:
+                time = L.split("[", 1)[1].split("]", 1)[0]
+
+            # Request
+            req = ""
+            if '"' in L:
                 try:
                     req = L.split('"')[1]
                 except:
                     req = ""
-                method, endpoint, proto = (req.split() + ["","",""])[:3]
-                status = parts[-2] if parts[-2].isdigit() else ""
-                size = parts[-1] if parts[-1].isdigit() else ""
-                rows.append((time, ip, method, endpoint, status, size))
-            df = pd.DataFrame(rows, columns=["time","ip","method","path","status","size"])
-        df["time_parsed"] = pd.to_datetime(df["time"], errors="coerce", infer_datetime_format=True)
+
+            req_parts = req.split()
+            method = req_parts[0] if len(req_parts) > 0 else ""
+            endpoint = req_parts[1] if len(req_parts) > 1 else ""
+
+            # Status + Size (chính xác)
+            status = parts[-2] if parts[-2].isdigit() else ""
+            size = parts[-1] if parts[-1].isdigit() else ""
+
+            rows.append((time, ip, method, endpoint, status, size))
+
+        df = pd.DataFrame(rows, columns=["time", "ip", "method", "path", "status", "size"])
+        df["status"] = df["status"].astype(str)
         return df
+
     except Exception as e:
         st.error(f"Error loading file: {e}")
         return pd.DataFrame()
+
 
 def load_mysql(host, user, password, database, query):
     try:
