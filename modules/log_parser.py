@@ -97,9 +97,6 @@ def parse_log_file(uploaded_file) -> Tuple[List[Tuple], Dict]:
     """
     Đọc file log và trả về danh sách các bản ghi đã parse
     
-    Args:
-        uploaded_file: File object từ Streamlit file_uploader
-    
     Returns:
         tuple: (data_list, stats_dict)
             - data_list: List các tuple (ip_address, timestamp, status, log_level, response)
@@ -221,7 +218,7 @@ def parse_log_file(uploaded_file) -> Tuple[List[Tuple], Dict]:
     if stats['total_lines'] > 0:
         success_rate = (stats['parsed_success'] / stats['total_lines']) * 100
         
-        # Chọn màu dựa trên success rate
+
         if success_rate >= 90:
             box_type = "success"
             emoji = "✅"
@@ -299,3 +296,5 @@ def generate_sample_log(num_lines: int = 10) -> str:
         logs.append(log_line)
     
     return '\n'.join(logs)
+
+
