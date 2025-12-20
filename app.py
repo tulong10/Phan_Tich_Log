@@ -18,31 +18,6 @@ st.set_page_config(page_title="Log Analyzer Pro", layout="wide", initial_sidebar
 
 df_global = pd.DataFrame()
 
-def export_pdf(df):
-    buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer)
-    styles = getSampleStyleSheet()
-    elems = [
-        Paragraph("Log Analyzer Report", styles["Title"]),
-        Spacer(1, 12)
-    ]
-    if "ip" in df.columns:
-        top = df["ip"].value_counts().head(10).reset_index()
-        top.columns = ["ip", "count"]
-        elems.append(Table([top.columns.tolist()] + top.values.tolist()))
-    doc.build(elems)
-    buffer.seek(0)
-    return buffer
-
-def export_pptx():
-    buffer = BytesIO()
-    prs = Presentation()
-    slide = prs.slides.add_slide(prs.slide_layouts[0])
-    slide.shapes.title.text = "Log Analyzer Report"
-    prs.save(buffer)
-    buffer.seek(0)
-    return buffer
-
 def page_dashboard(df):
     st.title("📊 Dashboard")
     
@@ -185,4 +160,5 @@ def main():
         page_notifications(df_global)
 
 if __name__ == "__main__":
+
     main()
