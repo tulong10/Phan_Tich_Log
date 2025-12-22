@@ -68,6 +68,7 @@ def get_data_to_dataframe() -> pd.DataFrame:
             query = "SELECT * FROM server_logs ORDER BY timestamp DESC"
             df = pd.read_sql(query, conn)
             
+            df.rename(columns={'ip_address': 'ip'}, inplace=True)
             # Convert timestamp sang datetime nếu chưa phải
             if 'timestamp' in df.columns:
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
@@ -249,7 +250,18 @@ def get_statistics() -> dict:
             cursor.execute(stats_query)
             result = cursor.fetchone()
             
-            return result if result else {}
+            if result:
+                # Chuyển đổi Decimal thành int
+                return {
+                    'total_logs': int(result.get('total_logs', 0)),
+                    'unique_ips': int(result.get('unique_ips', 0)),
+                    'error_count': int(result.get('error_count', 0)),
+                    'warning_count': int(result.get('warning_count', 0)),
+                    'info_count': int(result.get('info_count', 0)),
+                    'earliest_log': result.get('earliest_log'),
+                    'latest_log': result.get('latest_log')
+                }
+            return {}
             
         except Error as e:
             st.error(f"Lỗi khi lấy thống kê: {e}")
