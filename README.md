@@ -1,5 +1,5 @@
 # Log Analyzer
-- Application for analyzing log files with Streamlit interface, MySQL database storage and PDF/PPTX report export.
+- Application for analyzing log files with Streamlit interface, MySQL database storage and  report export.
 Requirements
 
 - Docker & Docker Compose
