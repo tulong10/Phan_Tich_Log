@@ -30,6 +30,10 @@ def page_dashboard(df):
         st.info("Upload a log file or load from database to get started")
         return
     
+    # 🔧 Đổi tên cột nếu cần
+    if 'ip_address' in df.columns and 'ip' not in df.columns:
+        df = df.rename(columns={'ip_address': 'ip'})
+    
     col1, col2, col3 = st.columns(3)
     
     with col1:
@@ -91,13 +95,16 @@ def page_dashboard(df):
                     st.metric("Info", f"{stats.get('info_count', 0):,}")
         except:
             st.warning("Could not retrieve database statistics")
-
 def page_data_logs(df):
     st.title("📋 Data Logs")
     
     if df.empty:
         st.info("No data loaded")
         return
+    
+    
+    if 'ip_address' in df.columns and 'ip' not in df.columns:
+        df = df.rename(columns={'ip_address': 'ip'})
     
     col1, col2, col3 = st.columns([2, 1, 1])
     
