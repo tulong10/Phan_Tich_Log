@@ -140,6 +140,10 @@ def page_notifications(df):
         st.info("No data loaded")
         return
     
+    # 🔧 Đổi tên cột nếu cần
+    if 'ip_address' in df.columns and 'ip' not in df.columns:
+        df = df.rename(columns={'ip_address': 'ip'})
+    
     error_logs = df[df["status"] >= 500]
     warning_logs = df[(df["status"] >= 400) & (df["status"] < 500)]
     
