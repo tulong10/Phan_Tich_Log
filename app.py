@@ -174,6 +174,7 @@ def page_database():
                     st.session_state.df_global = df
                     st.session_state.data_source = "database"
                     st.success(f"✅ Loaded {len(df):,} records from database")
+                    st.rerun()
                 else:
                     st.warning("Database is empty")
     
@@ -192,6 +193,7 @@ def page_database():
                     ]
                     if save_log_data(data_list):
                         st.success(f"✅ Saved {len(df):,} records to database")
+                        st.rerun()
     
     # Clear database
     with col3:
@@ -200,6 +202,7 @@ def page_database():
                 with st.spinner("Clearing database..."):
                     if clear_all_logs():
                         st.success("✅ Database cleared")
+                        st.rerun()
     
     # View statistics
     with col4:
@@ -240,6 +243,7 @@ def page_database():
             st.session_state.df_global = df_filtered
             st.session_state.data_source = "database_filtered"
             st.success(f"✅ Loaded {len(df_filtered):,} filtered records")
+            st.rerun()
         else:
             st.info("No records found with these filters")
 
@@ -277,15 +281,6 @@ def main():
     
     st.sidebar.markdown("---")
     
-    # Data source indicator
-    if not st.session_state.df_global.empty:
-        st.sidebar.info(
-            f"📍 Source: {st.session_state.data_source.upper()}\n"
-            f"Records: {len(st.session_state.df_global):,}"
-        )
-    
-    st.sidebar.caption("Log Analyzer Pro v1.1")
-    
     # Page routing
     if page == "Dashboard":
         page_dashboard(st.session_state.df_global)
@@ -295,6 +290,16 @@ def main():
         page_notifications(st.session_state.df_global)
     elif page == "Database":
         page_database()
+    
+    # 🔧 DATA SOURCE INDICATOR - ĐẶT SAU PAGE ROUTING
+    st.sidebar.markdown("---")
+    if not st.session_state.df_global.empty:
+        st.sidebar.info(
+            f"📍 Source: {st.session_state.data_source.upper()}\n"
+            f"Records: {len(st.session_state.df_global):,}"
+        )
+    
+    st.sidebar.caption("Log Analyzer Pro v1.1")
 
 if __name__ == "__main__":
     main()
